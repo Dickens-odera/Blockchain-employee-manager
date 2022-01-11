@@ -1,7 +1,7 @@
 {
-  "name": "solidity-upgraddable-contracts",
+  "name": "blockchain-employee-manager",
   "version": "1.0.0",
-  "description": "A simple project to illustrate solidity smart contract upgradability",
+  "description": "A simple project to that securely stores employee data on the Ethereum blockchain",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,7 +9,7 @@
   "author": {
     "name": "Dickens Odera",
     "email": "dickensodera9@gmail.com",
-    "Github": "https://github.com/Dickens-odera"
+    "Github": "https://github.com/Dickens-odera/Blockchain-employee-manager"
   },
   "license": "MIT",
   "devDependencies": {
