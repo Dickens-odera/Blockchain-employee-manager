@@ -33,14 +33,23 @@ contract Employee is Ownable{
     EmployeeRecord[] public employeeRecords;
 
     mapping(address => bool) public recordExists; // to help check whether the employee exists before adding them via the isMissingFromRecords modifier
+    mapping(uint => bool) public employeeIdExists; //check that the supplied id exists
     mapping(address => EmployeeRecord) public employeesByUser; //to help keep track of who added this employee
+    mapping(uint => EmployeeRecord) public employeeBioDataById; //helps fetch a single employee record by mapping instead of a loop
 
     constructor() public {}
 
     event NewEmployee(address indexed creator, address indexed employeeAddress, uint date); //for logging and listening to smart contract events on the blockchain
+
     //check that the provied employee address does not exists in the blockchain already
     modifier isMissingFromRecords(address employee){
         require(recordExists[employee] == false,"Employee record exists");
+        _;
+    }
+
+    //check that this employee id exists
+    modifier employeeExists(uint employeeId){
+        require(employeeIdExists[employeeId] == true,"The given employee ID does not exist");
         _;
     }
 
@@ -54,6 +63,7 @@ contract Employee is Ownable{
     * @param _employeeNumber uint
     * @param _designation bytes
     * @param _company bytes
+    * @return bool
     */
     function addEmployee(
         uint _phone, 
@@ -64,17 +74,52 @@ contract Employee is Ownable{
         uint _employeeNumber,
         bytes memory _designation,
         bytes memory _company
-    ) 
-    public onlyOwner isMissingFromRecords(_employee) returns(bool)
+    ) public onlyOwner isMissingFromRecords(_employee) returns(bool)
     {
         employeeIds.increment();
         uint currentEmployeeId = employeeIds.current();
         EmployeeRecord memory newEmployee = EmployeeRecord(currentEmployeeId, _phone,_firstName,_lastName,_email,_employee,_employeeNumber,_designation,_company);
         employeeRecords.push(newEmployee);
         recordExists[_employee] = true;
+        employeeBioDataById[currentEmployeeId] = newEmployee;
+        employeeIdExists[currentEmployeeId] = true;
         totalEmployees = totalEmployees.add(1);
         employeesByUser[msg.sender] = newEmployee;
         return true;
     }
 
+    /**
+    * @dev fetch all employees
+    * @return array of employees
+    */
+    function listEmployees() public view returns(EmployeeRecord[] memory) {
+        return employeeRecords;
+    }
+
+    /**
+    * @dev get employee biodata by it's ID
+    * @param _employeeId uint
+    */
+    function getEmployeeBioData(uint _employeeId) public view employeeExists(_employeeId) returns(
+        uint id,
+        uint phone,
+        string memory firstName,
+        string memory lastName,
+        string memory email,
+        address employeeAddress,
+        uint employeeNumber,
+        bytes memory designation,
+        bytes memory company
+    ){
+        EmployeeRecord storage employee = employeeBioDataById[_employeeId];
+        id = employee.id;
+        phone = employee.phone;
+        firstName = employee.firstName;
+        lastName = employee.lastName;
+        email = employee.email;
+        employeeAddress = employee.employeeAddress;
+        employeeNumber = employee.employeeNumber;
+        designation = employee.designation;
+        company = employee.company;
+    }
 }
