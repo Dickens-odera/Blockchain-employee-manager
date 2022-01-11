@@ -1,0 +1,23 @@
+{
+  "name": "solidity-upgraddable-contracts",
+  "version": "1.0.0",
+  "description": "A simple project to illustrate solidity smart contract upgradability",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "Dickens Odera",
+    "email": "dickensodera9@gmail.com",
+    "Github": "https://github.com/Dickens-odera"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.4",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "chai": "^4.3.4",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.3",
+    "hardhat": "^2.8.0"
+  }
+}
